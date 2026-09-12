@@ -19,5 +19,20 @@ const Cliente = {
             throw error;
         }
     },
+    updateClient: async(id, nome, cpf)=>{
+        try{
+            if(!id){
+                throw new Error('ID do cliente é necessário!');
+            }
+            const [result] = await db.execute('UPDATE Cliente SET nome = ?, cpf = ? WHERE id = ?', [nome, cpf, id]);
+
+            if(result.affectedRows === 0){
+                throw new Error('Cliente não cadastrado!')
+            }
+        } catch (error) {
+            throw error;
+        }
+    },
+    
 }
 module.exports = Cliente;

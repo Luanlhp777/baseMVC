@@ -15,6 +15,22 @@ const clienteController = {
             console.error('Erro ao criar novo cliente: ', error);
             res.status(500).json({error: 'Erro ao criar novo cliente:.'})
         }
+    },
+    getAllClients: async (req, res)=>{
+        try{
+            const clients = await ClienteModel.getAllClients();
+            res.status(200).json(clients);
+        } catch (error) {
+            console.error('Erro ao obter dados:', error);
+            res.status(500).json({error: 'Erro ao obter dados:'});
+        }
+    },
+    updateClient: async(req, res)=>{
+        const { id } = req.params;
+        const { nome, cpf } = req.body;
+        try {
+            
+        }
     }
 }
 module.exports = clienteController;
