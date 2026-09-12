@@ -6,7 +6,10 @@ const app = express();
 const PORT = 3000; 
 
 app.use(express.json()); 
-app.use(express.static(path.join(__dirname, 'public'))); 
+app.use(express.static(path.join(__dirname, 'public')));
+
+//ROTA PARA ADICIONAR CLIENTE
+app.post('/api/clientes', clienteController.createNewClient);
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);

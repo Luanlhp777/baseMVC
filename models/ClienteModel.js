@@ -20,3 +20,4 @@ const Cliente = {
         }
     },
 }
+module.exports = Cliente;
