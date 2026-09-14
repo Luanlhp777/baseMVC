@@ -2,11 +2,11 @@ const mysql = require('mysql2');
 
 // Configurar a conexão com o banco de dados
 const connection = mysql.createConnection({
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'aluno',
+    host: 'COLOCAR_HOST',
+    port: 3306,
+    user: 'COLOCAR_USER',
+    password: 'COLOCAR_SENHA',
     database: 'mvc',
-    port: 3302  
 });
 
 // Conectar ao banco de dados
@@ -15,7 +15,7 @@ connection.connect((err) => {
         console.error('Erro de conexão: ' + err.stack);
         return;
     }
-    
+
 });
 
 
