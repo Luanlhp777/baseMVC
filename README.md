@@ -1,24 +1,24 @@
-# Base MVC — Node.js + Express + MySQL
+# Base MVC — Node.js, Express e MySQL
 
 > 🚧 Projeto acadêmico em desenvolvimento
 
 Projeto criado para praticar o padrão de arquitetura **MVC (Model, View e Controller)** utilizando **Node.js**, **Express** e **MySQL**.
 
-A aplicação trabalha com cadastro de clientes e separa as responsabilidades entre interface, controle das requisições e acesso ao banco de dados.
+A aplicação disponibiliza uma API REST para o gerenciamento de clientes, permitindo cadastrar, consultar, atualizar e excluir registros.
 
 ---
 
 ## Tecnologias utilizadas
 
-- Node.js
-- Express
-- JavaScript
-- MySQL
-- mysql2
-- HTML
-- CSS
-- Git
-- GitHub
+* Node.js
+* Express
+* JavaScript
+* MySQL
+* mysql2
+* HTML
+* CSS
+* Git
+* GitHub
 
 ---
 
@@ -48,21 +48,15 @@ baseMVC/
 
 ## Arquitetura MVC
 
-O projeto segue a estrutura:
+O projeto separa as responsabilidades da aplicação no seguinte fluxo:
 
 ```text
-View
-  ↓
-Controller
-  ↓
-Model
-  ↓
-MySQL
+View → Controller → Model → MySQL
 ```
 
 ### Model
 
-Responsável pelo acesso ao banco de dados.
+Responsável pelas consultas e alterações realizadas no banco de dados.
 
 Arquivo:
 
@@ -70,11 +64,12 @@ Arquivo:
 models/ClienteModel.js
 ```
 
-Possui operações para:
+Operações implementadas:
 
-- cadastrar clientes;
-- listar clientes;
-- atualizar clientes.
+* cadastrar clientes;
+* listar clientes;
+* atualizar clientes;
+* excluir clientes.
 
 ### View
 
@@ -90,7 +85,7 @@ public/delete.html
 
 ### Controller
 
-Responsável por receber as requisições e utilizar o Model.
+Responsável por receber as requisições HTTP, validar os dados enviados e chamar os métodos do Model.
 
 Arquivo:
 
@@ -102,7 +97,7 @@ controllers/clienteController.js
 
 ## Banco de dados
 
-O projeto utiliza o banco:
+O projeto utiliza o banco de dados:
 
 ```text
 mvc
@@ -114,9 +109,13 @@ Tabela:
 cliente
 ```
 
-Estrutura:
+Estrutura utilizada:
 
 ```sql
+CREATE DATABASE IF NOT EXISTS mvc;
+
+USE mvc;
+
 CREATE TABLE IF NOT EXISTS cliente (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -126,15 +125,18 @@ CREATE TABLE IF NOT EXISTS cliente (
 
 ---
 
-## API
+## Rotas da API
 
-Atualmente o projeto possui a rota:
+| Método   | Rota                | Descrição                   |
+| -------- | ------------------- | --------------------------- |
+| `POST`   | `/api/clientes`     | Cadastra um cliente         |
+| `GET`    | `/api/clientes`     | Lista todos os clientes     |
+| `PUT`    | `/api/clientes/:id` | Atualiza um cliente pelo ID |
+| `DELETE` | `/api/clientes/:id` | Exclui um cliente pelo ID   |
 
-```text
-POST /api/clientes
-```
+### Estrutura dos dados
 
-Exemplo de requisição:
+As rotas de cadastro e atualização recebem os dados em formato JSON:
 
 ```json
 {
@@ -142,38 +144,6 @@ Exemplo de requisição:
   "cpf": "12345678900"
 }
 ```
-
-Em caso de sucesso:
-
-```text
-201 Created
-```
-
----
-
-## Status do projeto
-
-### Implementado
-
-- estrutura MVC;
-- conexão com MySQL;
-- cadastro de clientes;
-- consulta de clientes no Model;
-- atualização de clientes no Model;
-- Controller de clientes;
-- página de cadastro;
-- páginas de atualização e exclusão;
-- servidor Express.
-
-### Em desenvolvimento
-
-- rota GET para listar clientes;
-- conclusão da atualização;
-- rota PUT;
-- exclusão de clientes;
-- rota DELETE;
-- integração completa das páginas HTML com a API;
-- finalização do CRUD.
 
 ---
 
@@ -197,24 +167,22 @@ Instale as dependências:
 npm install
 ```
 
-Execute o arquivo:
+Execute o arquivo abaixo no MySQL:
 
 ```text
 banco.sql
 ```
 
-no MySQL.
-
-Caso necessário, ajuste as configurações em:
+Configure os dados de conexão com o banco no arquivo:
 
 ```text
 config/db.js
 ```
 
-Depois inicie o servidor:
+Depois, inicie o servidor:
 
 ```bash
-node app.js
+node --watch app.js
 ```
 
 A aplicação ficará disponível em:
@@ -225,21 +193,96 @@ http://localhost:3000
 
 ---
 
+## Testando pelo PowerShell
+
+Com o servidor em execução, as rotas podem ser testadas diretamente pelo PowerShell.
+
+### Cadastrar um cliente
+
+```powershell
+Invoke-RestMethod `
+  -Uri "http://localhost:3000/api/clientes" `
+  -Method POST `
+  -ContentType "application/json" `
+  -Body '{"nome":"Maria","cpf":"12345678900"}'
+```
+
+### Listar todos os clientes
+
+```powershell
+Invoke-RestMethod `
+  -Uri "http://localhost:3000/api/clientes" `
+  -Method GET
+```
+
+### Atualizar um cliente
+
+Troque o número `1` pelo ID do cliente desejado:
+
+```powershell
+Invoke-RestMethod `
+  -Uri "http://localhost:3000/api/clientes/1" `
+  -Method PUT `
+  -ContentType "application/json" `
+  -Body '{"nome":"Maria Atualizada","cpf":"12345678900"}'
+```
+
+### Excluir um cliente
+
+Troque o número `1` pelo ID do cliente desejado:
+
+```powershell
+Invoke-RestMethod `
+  -Uri "http://localhost:3000/api/clientes/1" `
+  -Method DELETE
+```
+
+---
+
+## Status do projeto
+
+### Funcionalidades implementadas
+
+* [x] Estrutura MVC;
+* [x] conexão do Node.js com o MySQL;
+* [x] servidor configurado com Express;
+* [x] cadastro de clientes com `POST`;
+* [x] listagem de clientes com `GET`;
+* [x] atualização de clientes com `PUT`;
+* [x] exclusão de clientes com `DELETE`;
+* [x] validação dos campos obrigatórios;
+* [x] páginas HTML para cadastro, atualização e exclusão;
+* [x] testes das rotas pelo PowerShell;
+* [x] CRUD conectado ao banco de dados.
+
+### Próximos passos
+
+* [ ] Integrar completamente as páginas HTML com a API;
+* [ ] exibir os clientes cadastrados na interface;
+* [ ] adicionar botões de edição e exclusão;
+* [ ] melhorar o tratamento das respostas de erro;
+* [ ] proteger as configurações do banco com variáveis de ambiente;
+* [ ] finalizar a interface do CRUD.
+
+---
+
 ## Conceitos praticados
 
-- MVC
-- Node.js
-- Express
-- MySQL
-- API REST
-- CRUD
-- Models
-- Controllers
-- Views
-- Rotas HTTP
-- `async/await`
-- JSON
-- Separação de responsabilidades
+* Arquitetura MVC
+* Node.js
+* Express
+* MySQL
+* API REST
+* CRUD
+* Models
+* Controllers
+* Views
+* Rotas HTTP
+* Métodos `GET`, `POST`, `PUT` e `DELETE`
+* `async/await`
+* JSON
+* Separação de responsabilidades
+* Testes de API pelo PowerShell
 
 ---
 
@@ -247,4 +290,4 @@ http://localhost:3000
 
 **Luan Araujo**
 
-Projeto acadêmico desenvolvido para prática de **MVC, Node.js, Express e MySQL**.
+Projeto acadêmico desenvolvido para praticar **MVC, Node.js, Express, APIs REST e MySQL**.
